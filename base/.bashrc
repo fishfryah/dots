@@ -1,4 +1,4 @@
-# 
+# 2018mar8 
 # ~/.bashrc
 # Author: Todd Gaunt
 # Hacked by Dad
