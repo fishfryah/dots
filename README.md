@@ -5,5 +5,10 @@ Dotfiles
 ```
 cd ~/dots;
 git pull;
-stow base
+stow base;
+
+mkdir ~/var;
+
+
+
 ```
