@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# Set the Xroot to the current status line
+
+usage()
+{
+	printf "usage: uistat <battery|wifi|ip>"
+}
+
+# Mpd music player current song.
+mpd_stat()
+{
+	song="$(basename "$(mpc | head -n 1)")"
+	if [ "$song" != "" ]; then
+		if [ ${#song} -gt 40 ]; then
+			printf "\"%.*s...\"" 40 "$song"
+		else
+			printf "\"%s\"" "$song"
+		fi
+	else
+		printf "null"
+	fi
+}
+
+# Current IP address.
+ip_stat()
+{
+	IP=$(ip addr show \
+		| grep 'state UP' -A2 \
+		| tail -n 1 | awk '{print $2}')
+	if [[ "$IP" == "" ]]; then
+		printf "No IP found"
+	else
+		printf "%s" "$IP"
+	fi
+}
+
+# Wifi connection status
+wifi_stat()
+{
+	quality=$(cat /proc/net/wireless \
+		| awk 'FNR == 3 {print $3}' \
+		| tr -d [:punct:])
+	status="((*))"
+	if [ "$quality" == "" ]; then
+		quality=0
+		status="--X--"
+	fi
+	printf "%s %s%%" "$status" "$quality"
+}
+
+# Current battery status.
+battery_stat()
+{
+	n=0
+	charge=0
+	for i in /sys/class/power_supply/BAT*; do
+		charge=$(( charge + $(cat $i/capacity)))
+		n=$(( n + 1 ));
+	done
+	charge=$(( charge / n ))
+	#status=$(cat /sys/class/power_supply/BAT$((n - 1))/status)
+	#if [ "Charging" == "$status" ]; then
+		#status="++"
+	#elif [ "Discharging" == "$status" ]; then
+		#status="--"
+	#else
+		#status="**"
+	#fi
+	#printf "%s%s%%" "$status" "$charge"
+	printf "%s%%" "$charge"
+}
+
+SUBCMD=$1
+shift
+case $SUBCMD in
+	"battery")
+		battery_stat
+		;;
+	"ip")
+		ip_stat
+		;;
+	"wifi")
+		wifi_stat
+		;;
+	*)
+		usage "$SUBCMD"
+		echo "unknown sub command $SUBCMD" 1>&2
+		exit
+		;;
+esac
+
+# End of file

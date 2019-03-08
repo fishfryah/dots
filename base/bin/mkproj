@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# Setup a git repository locally and remotely.
+
+PROJECT_DIRECTORY=$HOME/usr/src
+REMOTE=192.168.168.10
+REMOTE_DIR=/srv/git/umbraa
+
+PROJECT=$1
+
+setup_C() {
+	git init "$PROJECT_DIRECTORY/$PROJECT"
+	cd "$PROJECT_DIRECTORY/$PROJECT"
+	if [ -d "$XDG_TEMPLATES_DIR/git/" ]; then
+		cp "$XDG_TEMPLATES_DIR/git/"{.[^.],}* .
+	fi
+	ssh git@"$REMOTE" "mkdir -p $REMOTE_DIR/$PROJECT && git init --bare $REMOTE_DIR/$PROJECT"
+	if [ 0 -gt $? ]; then
+		printf "%s\n" "$0: error: Unable to setup remote repository"
+	fi
+	git remote add origin "git@$REMOTE:$REMOTE_DIR/$PROJECT"
+	git add --all
+	git commit -m "Initial commit"
+	git branch develop
+	git checkout develop
+	git push origin --all
+}
+
+setup_C
+
+# End of file

@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+# Author: Todd Gaunt
+# Lock the screen and then optionally suspend or hibernate the machine.
+
+# Create a blurred lockscreen image.
+scrot ~/tmp/screenshot.png
+convert ~/tmp/screenshot.png -blur 0x5 ~/tmp/screenshotblur.png
+
+# Lock the screen.
+i3lock -i ~/tmp/screenshotblur.png
+
+# Suspend or hibernate if specified.
+if [ "$1" == "suspend" ]; then
+	sudo pm-suspend
+elif [ "$1" == "hibernate" ]; then
+	sudo pm-hibernate
+fi
+
+# End of file

@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+#
+
+usage()
+{
+	echo "usage: multihead <extern | intern | above| right | left>"
+}
+
+ARG=$1
+
+case "$ARG" in
+	"extern")
+		xrandr --output VGA1 --primary --auto \
+		       --output LVDS1 --off 
+		;;
+	"intern")
+		xrandr --output LVDS1 --primary --auto \
+		       --output VGA1 --off
+		;;
+	"above")
+		xrandr --output LVDS1 --primary --auto \
+		       --output VGA1 --above LVDS1 --auto \
+		;;
+	"right")
+		xrandr --output LVDS1 --primary --auto \
+		       --output VGA1 --right-of LVDS1 --auto \
+		;;
+	"left")
+		xrandr --output LVDS1 --primary --auto \
+		       --output VGA1 --left-of LVDS1 --auto \
+	       ;;
+	"above")
+		xrandr --output LVDS1 --primary --auto \
+		       --output VGA1 --above LVDS1 --auto \
+		;;
+	*)
+		usage
+		exit
+		;;
+esac
+
+if [ -x "$(command -v nitrogen)" ];then
+	nitrogen --restore
+fi
+
+# End of file

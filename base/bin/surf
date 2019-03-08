@@ -1,0 +1,15 @@
+#!/bin/bash 
+#
+# Essentially a launcher for a configured surf instance
+
+ARGS=""
+
+if [[ "$@" == "" ]]; then
+	ARGS="$HOME/etc/homepage/index.html"
+else
+	ARGS="$1"
+fi
+
+/usr/bin/surf -D -f -g -I -k -m -N -P -s $ARGS
+
+# End of file

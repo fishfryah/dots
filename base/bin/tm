@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# ~/bin/tmux-dev
+# A startup script for selecting tmux sessions
+
+while true; do
+    # Abort if already in tmux session
+    [ "$TMUX" == "" ] || exit 1
+
+    SESSION_NAME=""
+    PS3="Choose an session | option: "
+    options=( \
+        "new-session" \
+        "kill-session" \
+        "change-dir" \attack-se
+        $(tmux list-sessions -F "#S" 2>/dev/null))
+    printf "Available sessions\n"
+    printf "($(pwd))\n"
+    echo "------------------"
+
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "new-session")
+                while [ "$SESSION_NAME" == "" ];do
+                    printf "Enter new session name: "
+                    read SESSION_NAME
+                done
+                #echo "$SESSION_NAME"
+                tmux new-session -s "$SESSION_NAME"
+                break
+                ;;
+            "kill-session")
+                while [ "$SESSION_NAME" == "" ];do
+                    printf "Enter session to kill: "
+                    read SESSION_NAME
+                done
+                echo "$SESSION_NAME"
+                tmux kill-session -t "$SESSION_NAME"
+                break
+                ;;
+            "change-dir")
+                SUCCESS=1
+                while [ "$SUCCESS" -eq "1" ];do
+                    printf "$(pwd): "
+                    read DIRECTORY
+                    cd "$DIRECTORY"
+                    SUCCESS="$?"
+                    if [ "$SUCCESS" -eq "1" ]; then
+                        printf "Could not change to $DIRECTORY"
+                    fi
+                done
+                break
+                ;;
+            *)
+                tmux attach-session -t "$opt" || echo "Unable to attach $opt"
+                break
+                ;;
+        esac
+    done
+done
+
+exit 0
+
+# End of File

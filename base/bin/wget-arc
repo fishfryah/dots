@@ -1,0 +1,22 @@
+#!/bin/sh
+
+SITE="$1"
+
+# Customize these vars
+PREFIX="$HOME/lib/www"
+# ---------------------
+
+printf -- "Saving %s in %s\n" $SITE $PREFIX
+
+wget \
+	--directory-prefix="$PREFIX" \
+	--continue \
+	--mirror \
+	--page-requisites \
+	--html-extension \
+	--convert-links \
+	--execute robots=off \
+	--user-agent=”” \
+	--wait 2 \
+	--random-wait \
+	"$SITE"

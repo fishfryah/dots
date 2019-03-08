@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+wacomscreen \
+	-d "Wacom Intuos5 touch S Pen stylus" \
+	-d "Wacom Intuos5 touch S Pen eraser" \
+	-s eDP1
+	#-s LVDS1

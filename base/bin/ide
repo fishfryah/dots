@@ -1,0 +1,117 @@
+#!/bin/bash
+# Author: Todd Gaunt
+# Open up a tmux session as an integrated development environment
+
+ENVIRONMENTS=(c chicken sbcl rust tex walden)
+
+ENV="c"
+SESSION=""
+KILL=0
+
+usage() {
+	echo "Usage: $0 [OPTIONS] PROJECT"
+	echo "OPTIONS"
+	echo "	-h, --help"
+	echo "		Display this help and exit"
+	echo "	-e, --environment"
+	echo "		Choose the environment configuration to start with"
+	echo "	-l, --list-environments"
+	echo "		List all available coding environments"
+}
+
+list_environments() {
+	echo "ENVIRONMENTS"
+	for i in ${ENVIRONMENTS[@]}; do
+		echo "	$i"
+	done
+}
+
+ide_c() {
+	tmux split-window -t "$1" -h 
+}
+
+ide_chicken() {
+	tmux split-window -t "$1" -h 'exec csi'
+	tmux split-window -t "$1" -v
+}
+
+ide_rust() {
+	tmux split-window -t "$1" -h 
+}
+
+ide_sbcl() {
+	tmux split-window -t "$1" -h 'exec sbcl'
+	tmux split-window -t "$1" -v
+}
+
+ide_tex() {
+	tmux split-window -t "$1" -h
+}
+
+arg_parse() {
+	while [ $# -gt 0 ]; do
+		OPT="$1"
+		shift
+		case $OPT in
+			"-h"|"--help")
+				usage
+				exit 0
+				;;
+			"-e" | "--environment")
+				ENV="$1"
+				shift
+				;;
+			"-l" | "--list-environments")
+				list_environments
+				exit 0
+				;;
+			"-k" | "--kill")
+				KILL=1
+				;;
+			"-"* | "--"*)
+				echo "$0: error: Unknown option '$OPT'"
+				usage
+				exit -1
+				;;
+			*)
+				SESSION=$OPT
+				;;
+		esac
+	done
+}
+
+arg_parse $@
+if [ "" == "$SESSION" ]; then
+	echo "$0: error: No session name provided"
+	exit -1
+fi
+if [ 1 -eq $KILL ]; then
+	tmux kill-session -t "$SESSION"
+	exit 0;
+fi
+tmux new-session -d -s "$SESSION" 'exec vim'
+case $ENV in
+	"c")
+		ide_c "$SESSION"
+		;;
+	"chicken")
+		ide_chicken "$SESSION"
+		;;
+	"sbcl")
+		ide_sbcl "$SESSION"
+		;;
+	"rust")
+		ide_rust "$SESSION"
+		;;
+	"tex")
+		ide_tex "$SESSION"
+		;;
+	"walden")
+		;;
+	*)
+		echo "$0: error: Environment '$ENV' unavailable"
+		exit -1
+		;;
+esac
+tmux select-pane -t "$SESSION":.1 &&
+tmux attach-session -t "$SESSION"

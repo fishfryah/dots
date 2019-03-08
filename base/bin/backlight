@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Changes the blacklight to arg 
+
+args=("$@")
+ptbright="/sys/class/backlight/intel_backlight/brightness"
+mxbright="$(cat "/sys/class/backlight/intel_backlight/max_brightness")"
+unit=$((mxbright / 9))
+
+echo "Changing backlight to level: ${args[0]}"  
+
+case ${args[0]} in
+1)
+	tee $ptbright <<< $((unit * 1))
+	;;
+2)
+	tee $ptbright <<< $((unit * 2))
+	;;
+3)
+	tee $ptbright <<< $((unit * 3))
+	;;
+4)
+	tee $ptbright <<< $((unit * 4))
+	;;
+5)
+	tee $ptbright <<< $((unit * 5))
+	;;
+6)
+	tee $ptbright <<< $((unit * 6))
+	;;
+7)
+	tee $ptbright <<< $((unit * 7))
+	;;
+8)
+	tee $ptbright <<< $((unit * 8))
+	;;
+9)
+	tee $ptbright <<< $mxbright 
+	;;
+*)
+	echo "Not a supported brightness level, enter a number 1-9"
+	;;
+esac
+
+# End of file

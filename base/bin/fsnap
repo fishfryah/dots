@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+#
+
+BTRFS_DIR=/btrfs
+SNAPSHOT_DIR=/btrfs/snapshots
+TIMESTAMP=$(date '+%y.%m.%d.%Hh%Mm%Ss')
+NAME=""
+
+usage()
+{
+	echo "usage: fsnap <SUBCMD> [OPTIONS]..."
+	echo ""
+	echo "OPTIONS"
+	echo "    -h, --help"
+	echo "        Display this help message and exit"
+	echo "SUB-COMMANDS"
+	echo "    create <NAME>"
+	echo "        Create a snapshot of \"/\" as ${SNAPSHOT_DIR}/${TIMESTAMP}_${NAME}"
+	echo "    rollback <PATH-TO-SNAPSHOT>"
+	echo "        Rollback \"/\" to desired snapshot on next boot"
+}
+
+if [ $# -eq 0 ]; then
+	usage
+	exit
+fi
+
+while [ $# -gt 0 ]; do
+	OPT="$1"
+	shift
+	case $OPT in
+		"-h"|"--help")
+			usage
+			exit
+			;;
+		"create")
+			NAME=$1
+			shift
+			if [ "$NAME" == "" ]; then
+				usage
+				exit
+			fi
+			mkdir -p "$SNAPSHOT_DIR"
+			btrfs subvol snapshot -r / ${SNAPSHOT_DIR}/${TIMESTAMP}_${NAME}
+			;;
+		"rollback")
+			PATH=$1
+			shift
+			mv ${BTRFS_DIR}/root ${BTRFS_DIR}/oldroot
+			btrfs subvol snapshot ${PATH} ${BTRFS_DIR}/root
+			exit
+			;;
+		*)
+			echo "fsnap: invalid option $OPT" 1>&2
+			echo "Try 'fsnap -h' for more information." 1>&2
+			exit $EXIT_CODE_USAGE
+			;;
+	esac
+done
+
+# End of file

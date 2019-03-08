@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Author: Todd Gaunt
+# Settings for bash sessions
+
+# Normal user color
+col=$(tput setaf 2)
+res=$(tput sgr0)
+
+if [ "$UID" == "0" ];then
+	# Root user color
+	col=$(tput setaf 1)
+elif [ $UID -lt 100 ];then
+	# System users, should never see under normal circumstances
+	col=$(tput setaf 4)
+fi
+
+export PS1="\u\[$col\]@\[$res\]\h \w \[$col\]\\$ \[$res\]"
+export PS2="\[$col\]> \[$res\]"
+
+# Vi like editing mode
+set -o vi
+
+unset col res
+
+# End of file

@@ -1,0 +1,9 @@
+#! /bin/sh
+
+CUE="$1"
+SND="$2"
+
+shnsplit -f "$CUE" "$SND" -t "%n %t" \
+&& sndconv wav flac \
+&& rm "${SND%.*}.flac" \
+&& cuetag.sh "$CUE" *.flac

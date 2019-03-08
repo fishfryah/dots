@@ -1,0 +1,18 @@
+#!/bin/bash
+# Set the Xroot to the current status line
+
+while true; do
+	now=$(date +%s%6N)
+	bufln=""
+	bufln+="| $(uistat ip) "
+	bufln+="| $(uistat wifi) "
+	bufln+="| $(uistat battery) "
+	bufln+="| $(date '+%a, %Y-%m-%d | %H:%M') "
+
+	xsetroot -name "$bufln"
+
+	# Update every ~5 seconds
+	sleep 5
+done
+
+# End of file

@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+# Author: Todd Gaunt
+# Start info panel, run dwm and log errors.
+
+~/bin/panel &
+# Log stderror to a file 
+dwm 2> ~/var/log/dwm.log
+# No error logging
+#dwm >/dev/null 2>&1
+
+# End of file

@@ -1,0 +1,48 @@
+#
+# /etc/profile: system-wide defaults for bash(1) login shells
+# System-wide shell configuration file
+
+PROFILE_DIR="/etc/profile.d"
+
+HISTSIZE=5000
+HISTFILESIZE=5000
+
+# If the user doesn't have a .inputrc, use the one in /etc.
+if [ ! -r "$HOME/.inputrc" ]; then
+	export INPUTRC=/etc/inputrc
+fi
+
+# Set TERM to linux for unknown type or unset variable:
+if [ "$TERM" = "" -o "$TERM" = "unknown" ]; then
+	TERM=linux
+fi
+
+# Default system PATH
+PATH="/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games"
+export PATH
+
+if [ "$SHELL" == "/bin/bash" ] && [ -r "/etc/bashrc" ];then
+	. /etc/bashrc
+else
+	if [ "$UID" == "0" ];then
+		PS1="# "
+		PS2="> "
+	else
+		PS1="$ "
+		PS2="> "
+	fi
+fi
+
+# Default umask.  A umask of 022 prevents group & world write.
+umask 022
+
+# Execute scripts in /etc/profile.d/
+for i in $PROFILE_DIR/*.sh; do
+	if [ -x $i ]; then
+		. $i
+	fi
+done
+
+unset PROFILE_DIR
+
+# End of file

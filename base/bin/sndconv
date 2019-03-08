@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Convert all files of extension $1 to extension $2
+
+shopt -s globstar
+for i in ./**/*."$1"; do
+	FILE="${i%.*}.$2"
+	if ! [ -f "$FILE" ]; then
+		< /dev/null ffmpeg \
+			-y \
+			-i "$i" \
+			-compression_level 10 \
+			"$FILE"
+	fi
+done

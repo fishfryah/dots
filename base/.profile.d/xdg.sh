@@ -1,0 +1,30 @@
+#!/bin/sh
+# /etc/profile.d/xdg
+# Changes default 
+
+# XDG directory specification
+XDG_CONFIG_HOME="$HOME/etc"
+XDG_RUNTIME_DIR="$HOME/tmp"
+XDG_CONFIG_DATA="$HOME/var/local"
+XDG_CONFIG_CACHE="$HOME/var/cache"
+XDG_CONFIG_STATE="$HOME/var/state"
+
+export XDG_CONFIG_HOME XDG_RUNTIME_DIR XDG_CONFIG_DATA XDG_CONFIG_CACHE XDG_CONFIG_STATE
+
+# Useful XDG user dirs
+XDG_DOWNLOAD_DIR="$HOME/var/download"
+XDG_PUBLICSHARE_DIR="$HOME/pub"
+XDG_TEMPLATES_DIR="$HOME/var/template"
+
+export XDF_DOWNLOAD_DIR XDG_PUBLICSHARE_DIR XDG_TEMPLATES_DIR
+
+# Hidden XDG dirs
+XDG_DESKTOP_DIR="$HOME/.desktop"
+XDG_DOCUMENTS_DIR="$HOME/lib/doc"
+XDG_MUSIC_DIR="$HOME/lib/audio"
+XDG_PICTURES_DIR="$HOME/lib/picture"
+XDG_VIDEOS_DIR="$HOME/lib/video"
+
+export XDG_DESKTOP_DIR XDG_DOCUMENTS_DIR XDG_MUSIC_DIR XDG_PICTURES_DIR XDG_VIDEOS_DIR
+
+# End of file

@@ -1,0 +1,38 @@
+#
+# ~/.gitconfig
+# Configuration file for git user information
+
+[user]
+	email = andrew.gaunt@barrierislands.us
+	name = Andrew Gaunt
+	signingkey = 749EDD71
+
+[alias]
+	hist = log \
+		--pretty=format:'%C(auto)%h %ad: %s%d %C(magenta)[%an]%C(reset)' \
+		--graph \
+		--date=short
+    sign = log \
+		--pretty=format:'%C(auto)%h %ad: %s%d %C(magenta)[%an]%C(reset)' \
+		--graph \
+		--date=short \
+        --show-signature
+	st = status
+	br = branch
+	ci = commit
+	co = checkout
+	pushall = !git remote | xargs -L1 git push --all
+
+[color]
+	color = auto
+
+[gitreview]
+	username = fishfryah
+
+[commit]
+	gpgSign = true
+
+[gpg]
+	program = gpg2
+
+# End of file

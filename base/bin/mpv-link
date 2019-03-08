@@ -1,0 +1,7 @@
+#!/bin/sh
+# Author: Todd Gaunt
+# Runs mpv with the current clipboard selection as an argument
+
+mpv --force-window=immediate "$(xsel -p)"
+
+# End of file
