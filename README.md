@@ -2,9 +2,8 @@
 
 Dotfiles
 
-# 
-
-cd ~/dots
-git pull
+```
+cd ~/dots;
+git pull;
 stow base
-
+```
